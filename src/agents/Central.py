@@ -11,6 +11,8 @@ class Central:
         self.nb_villagers = nb_villagers
         self.step_production = 0
         self.m_step_production = 0
+        self.panel_erosion_rate = 0.005/24
+        self.time = 7
 
     def add_panel(self):
         self.panels.append(Panel())
@@ -19,14 +21,14 @@ class Central:
         self.storages.append(Storage())
 
     def step(self):
-        print(1)
-        self.produce()
+        self.produce(self.time)
         self.consume()
         self.store()
+        self.time += 1
 
     def produce(self):
         for panel in self.panels:
-            self.step_production += panel.produce()
+            self.step_production += panel.produce(self.time)
         self.m_step_production = self.step_production
 
     def consume(self):
