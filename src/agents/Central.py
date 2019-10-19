@@ -3,12 +3,14 @@ from .Storage import Storage
 
 
 class Central:
-    def __init__(self, token_per_kW, nb_villagers):
+    def __init__(self, token_per_kw, nb_villagers):
         self.panels = []
         self.storages = []
         self.cash = []
-        self.token_per_kW = token_per_kW
+        self.token_per_kW = token_per_kw
         self.nb_villagers = nb_villagers
+        self.step_production = 0
+        self.m_step_production = 0
 
     def add_panel(self):
         self.panels.append(Panel())
@@ -16,17 +18,27 @@ class Central:
     def add_storage(self):
         self.storages.append(Storage())
 
+    def step(self):
+        self.produce()
+        self.consume()
+        self.store()
+
     def produce(self):
-        total_produced = 0
         for panel in self.panels:
-            total_produced += panel.produce()
-        quantity = total_produced
+            self.step_production += panel.produce()
+        self.m_step_production = self.step_production
+
+    def consume(self):
+        # Compute consumption 
+        pass
+
+    def store(self):
         for storage in self.storages:
-            if quantity:
-                quantity = storage.fill(quantity)
+            if self.step_production:
+                self.step_production = storage.fill(self.step_production)
             else:
                 break
-        self.distribute_tokens((total_produced - quantity) / 100)
+        self.distribute_tokens((self.m_step_production - self.step_production) / self.token_per_kW)
 
     def distribute_tokens(self, quantity):
         # Give N tokens to each villager
