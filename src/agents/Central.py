@@ -1,6 +1,7 @@
 from .Panel import Panel
 from .Storage import Storage
 from .Villager import Villager
+from .Business import Business
 
 
 class Central:
@@ -9,6 +10,7 @@ class Central:
         self.storages = []
         self.cash = []
         self.villagers = []
+        self.businesses = []
         self.token_per_kW = token_per_kw
         self.nb_villagers = nb_villagers
         self.step_production = 0
@@ -24,6 +26,9 @@ class Central:
 
     def add_villager(self):
         self.villagers.append(Villager())
+
+    def add_business(self):
+        self.businesses.append(Business())
 
     def step(self):
         self.produce()
@@ -42,6 +47,10 @@ class Central:
         # Update villagers needed consumption
         for v in self.villagers:
             v.needed_consumption_update(self.time)
+
+        # Update businesses needed consumption
+        for b in self.businesses:
+            b.needed_consumption_update(self.time)
 
         pass
 
