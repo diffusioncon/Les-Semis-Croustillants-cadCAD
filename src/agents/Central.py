@@ -3,7 +3,7 @@ from .Panel import Panel
 from .Storage import Storage
 from .Villager import Villager
 from .Business import Business
-from numpy import pi, exp
+from .functions import scaled_gaussian
 
 
 class Central:
@@ -85,4 +85,4 @@ class Central:
         scale = 3
         mu = 13
         var = 4**2
-        self.hospital_consumption = offset + scale*1/(2*pi*var)*exp(-(t-mu)**2/2/var)
+        self.hospital_consumption = offset + scale*scaled_gaussian(mu, var, t)

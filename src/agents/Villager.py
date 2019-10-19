@@ -1,5 +1,5 @@
-from numpy import pi, exp
 from .Market import Market
+from .functions import scaled_gaussian
 
 
 class Villager:
@@ -38,7 +38,4 @@ class Villager:
     def needed_consumption_update(self, time):
         t = time % 24
         minimum_consumption = .2
-        self.needed_consumption = minimum_consumption + self.morning_scale*self.gaussian(7, 1.25**2, t) + self.evening_scale*self.gaussian(20, 2.5**2, t)
-
-    def gaussian(self, mu, var, x):
-        return 1/(2*pi*var)*exp(-(x-mu)**2/2/var)
+        self.needed_consumption = minimum_consumption + self.morning_scale*scaled_gaussian(7, 1.25**2, t) + self.evening_scale*scaled_gaussian(20, 2.5**2, t)

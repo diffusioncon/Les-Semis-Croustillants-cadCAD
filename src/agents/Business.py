@@ -20,4 +20,4 @@ class Business(Villager):
             self.needed_consumption = (CONS_OFFSET+MAX_CONS)/2
 
         else:
-            self.needed_consumption = CONS_OFFSET
+            self.needed_consumption = MAX_CONS
