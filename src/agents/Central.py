@@ -32,7 +32,7 @@ class Central:
         self.m_step_production = self.step_production
 
     def consume(self):
-        # Compute consumption 
+        # Compute consumption
         pass
 
     def store(self):
