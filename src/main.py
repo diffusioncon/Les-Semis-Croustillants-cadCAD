@@ -17,7 +17,6 @@ def main():
     exec_context = ExecutionContext(exec_mode.single_proc)
     executor = Executor(exec_context, [config])
     executor.execute()
-    #raw_result = [d for d in raw_result if d['substep'] == len(partial_state_update_blocks)]
 
     #raw_result = [d for d in raw_result if d['substep'] == len(partial_state_update_blocks)]
 
