@@ -26,6 +26,13 @@ class Market:
             self.transaction(token, villager, price)
         heappush(self._bid, (bid_price, quantity, villager))
 
+    def pull_from_ask(self, token):
+        for i in range(len(self._ask)):
+            if self._ask[i][1] == token:
+                self._ask[i:i+1] = []
+                return
+        raise Exception("Token not found")
+
     def transaction(self, token, buyer, price):
         owner = token.owner
         owner.credit(price)
