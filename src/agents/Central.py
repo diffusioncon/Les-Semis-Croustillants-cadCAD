@@ -90,7 +90,7 @@ class Central:
         scale = 3
         mu = 13
         var = 4**2
-        hospital_consumption = offset + scale*1/(2*pi*var)*exp(-(t-mu)**2/2/var)
+        hospital_consumption = offset + scale*scaled_gaussian(mu, var, t)
         delta = self.step_production - hospital_consumption
         if delta > 0:
             self.step_production -= hospital_consumption
