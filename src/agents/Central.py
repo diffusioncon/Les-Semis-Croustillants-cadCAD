@@ -1,3 +1,4 @@
+from random import triangular
 from .Panel import Panel
 from .Storage import Storage
 from .Villager import Villager
@@ -17,8 +18,12 @@ class Central:
         self.nb_villagers = nb_villagers
         self.step_production = 0
         self.m_step_production = 0
-        self.panel_erosion_rate = 0.005/24
         self.time = 7
+        self.init_villagers()
+
+    def init_villagers(self):
+        for i in range(self.nb_villagers):
+            self.add_villager()
 
     def add_panel(self):
         self.panels.append(Panel())
@@ -27,12 +32,15 @@ class Central:
         self.storages.append(Storage())
 
     def add_villager(self):
-        self.villagers.append(Villager())
+        villager = Villager(triangular(0, 1), triangular(0, 1))
+        self.villagers.append(villager)
 
     def add_business(self):
         self.businesses.append(Business())
 
     def step(self):
+        self.step_production = 0
+        self.m_step_production = 0
         self.produce()
         self.consume()
         self.store()
