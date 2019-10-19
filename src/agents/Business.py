@@ -18,7 +18,7 @@ class Business(Villager):
         if t < 7 or t > 19:
             self.needed_consumption = offset
 
-        elif t==8 or t==18:
+        elif t == 8 or t == 18:
             self.needed_consumption = (offset+max_cons)/2
 
         else:
