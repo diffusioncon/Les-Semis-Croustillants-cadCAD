@@ -1,14 +1,14 @@
 from .Panel import Panel
 from .Storage import Storage
 
-TOKEN_PER_KILLOWAT = 0
-
 
 class Central:
-    def __init__(self):
+    def __init__(self, token_per_kW, nb_villagers):
         self.panels = []
         self.storages = []
         self.cash = []
+        self.token_per_kW = token_per_kW
+        self.nb_villagers = nb_villagers
 
     def add_panel(self):
         self.panels.append(Panel())
