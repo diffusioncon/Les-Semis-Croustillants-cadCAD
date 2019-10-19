@@ -3,7 +3,7 @@ from .Panel import Panel
 from .Storage import Storage
 from .Villager import Villager
 from .Business import Business
-from numpy import pi, exp
+from .functions import scaled_gaussian
 
 
 class Central:
@@ -98,3 +98,4 @@ class Central:
             self.step_production = 0
             if self.take_from_storage(-delta) > 0:
                 print("WE DONT HAVE ENOUGH ELECTRICITY FOR THE HOSPITAL!")
+
