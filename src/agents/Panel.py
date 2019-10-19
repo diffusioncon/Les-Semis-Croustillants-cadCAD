@@ -1,11 +1,12 @@
 class Panel:
-    def __init__(self):
+    def __init__(self, hourly_erosion_rate):
         self.production_per_period = 1
         self.erosion = 0
+        self.hourly_erosion_rate = hourly_erosion_rate
 
     def produce(self):
-        self.erosion += .01
-        return self.production_per_period
+        self.erosion += self.hourly_erosion_rate
+        return self.production_per_period*(1-self.erosion)
 
     def repare(self):
         self.erosion = 0
