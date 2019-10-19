@@ -1,7 +1,7 @@
 class Storage:
-    def __init__(self):
-        self.stock = 0
-        self.max_stock = 0
+    def __init__(self, max_stock):
+        self.stock = max_stock
+        self.max_stock = max_stock
 
     def fill(self, quantity):
         free = self.max_stock - self.stock

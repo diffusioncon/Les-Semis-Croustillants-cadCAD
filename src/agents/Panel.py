@@ -6,7 +6,7 @@ class Panel:
 
     def produce(self):
         self.erosion += self.hourly_erosion_rate
-        return self.production_per_period*(1-self.erosion)
+        return self.production_per_period*(1-self.erosion)*f(t)
 
     def repare(self):
         self.erosion = 0
