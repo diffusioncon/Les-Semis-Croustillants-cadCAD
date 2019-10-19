@@ -5,6 +5,7 @@ from .Villager import Villager
 from .Business import Business
 from .Token import Token
 from numpy import pi, exp
+from .functions import scaled_gaussian
 
 
 class Central:
@@ -98,8 +99,8 @@ class Central:
         offset = 2
         scale = 3
         mu = 13
-        var = 4 ** 2
-        hospital_consumption = offset + scale * 1 / (2 * pi * var) * exp(-(t - mu) ** 2 / 2 / var)
+        var = 4**2
+        hospital_consumption = offset + scale*scaled_gaussian(mu, var, t)
         delta = self.step_production - hospital_consumption
         if delta > 0:
             self.step_production -= hospital_consumption
@@ -107,3 +108,4 @@ class Central:
             self.step_production = 0
             if self.take_from_storage(-delta) > 0:
                 print("WE DONT HAVE ENOUGH ELECTRICITY FOR THE HOSPITAL!")
+

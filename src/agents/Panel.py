@@ -1,4 +1,4 @@
-from numpy import pi, exp
+from .functions import scaled_gaussian
 
 EROSION_RATE = .005/24
 
@@ -20,14 +20,11 @@ class Panel:
         # return a value between 0 and 1 corresponding to the solar pannel
         # percentage production comparing to the max production,
         # depending of the day hour'''
-        t = time%24
+        t = time % 24
         if t < 7 or t > 19:
             return 0
 
         else:
             mu = 13
             var = 9
-            return self.gaussian(mu, var, t)
-
-    def gaussian(self, mu, var, x):
-        return 1/(2*pi*var)*exp(-(x-mu)**2/2/var)
+            return scaled_gaussian(mu, var, t)
