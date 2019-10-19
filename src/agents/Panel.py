@@ -16,7 +16,8 @@ class Panel:
     def repare(self):
         self.erosion = 0
 
-    def hour_prod(self, time):
+    @staticmethod
+    def hour_prod(time):
         # return a value between 0 and 1 corresponding to the solar pannel
         # percentage production comparing to the max production,
         # depending of the day hour'''

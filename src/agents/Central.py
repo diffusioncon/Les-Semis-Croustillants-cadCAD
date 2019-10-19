@@ -1,10 +1,9 @@
-from random import triangular
+from random import triangular, shuffle, randint
 from .Panel import Panel
 from .Storage import Storage
 from .Villager import Villager
 from .Business import Business
 from .Token import Token
-from numpy import pi, exp
 from .functions import scaled_gaussian
 
 
@@ -26,7 +25,7 @@ class Central:
     def init_simulation(self):
         for i in range(self.nb_villagers):
             self.add_villager()
-        for i in range(self.nb_villagers / 100):
+        for i in range(int(self.nb_villagers / 100)):
             self.add_business()
 
     def step(self):
@@ -36,6 +35,9 @@ class Central:
         self.hospital_consumption()
         self.distribute_tokens()
         self.compute_needed_consumption()
+        self.business_activities()
+        if self.time % 24*30 == 0:
+            self.pay_wages()
         self.trade()
         self.consume()
         self.store()
@@ -51,6 +53,14 @@ class Central:
             else:
                 self.current_token_id += 1
 
+    def business_activities(self):
+        for b in self.businesses:
+            b.generate_profit()
+
+    def pay_wages(self):
+        for b in self.businesses:
+            b.pay_employees()
+
     def add_panel(self):
         self.panels.append(Panel())
 
@@ -62,7 +72,11 @@ class Central:
         self.villagers.append(villager)
 
     def add_business(self):
-        self.businesses.append(Business(triangular(0, 0.5), triangular(1, 2)))
+        business = Business(triangular(0, 0.5), triangular(1, 2))
+        self.businesses.append(business)
+        unemployed = shuffle(list(filter(lambda v: not v.employed, self.villagers)))
+        for _ in range(randint(1, int(len(unemployed) / 10))):
+            business.add_employee(unemployed.pop())
 
     def produce(self):
         for panel in self.panels:
@@ -76,10 +90,14 @@ class Central:
             b.needed_consumption_update(self.time)
 
     def trade(self):
-        pass
+        all_agents = self.villagers + self.businesses
+        shuffle(all_agents)
+        for agent in all_agents:
+            agent.trade()
 
     def consume(self):
-        pass
+        for agent in self.villagers + self.businesses:
+            agent.consume()
 
     def store(self):
         for storage in self.storages:
@@ -99,8 +117,8 @@ class Central:
         offset = 2
         scale = 3
         mu = 13
-        var = 4**2
-        hospital_consumption = offset + scale*scaled_gaussian(mu, var, t)
+        var = 4 ** 2
+        hospital_consumption = offset + scale * scaled_gaussian(mu, var, t)
         delta = self.step_production - hospital_consumption
         if delta > 0:
             self.step_production -= hospital_consumption
@@ -108,4 +126,3 @@ class Central:
             self.step_production = 0
             if self.take_from_storage(-delta) > 0:
                 print("WE DONT HAVE ENOUGH ELECTRICITY FOR THE HOSPITAL!")
-
