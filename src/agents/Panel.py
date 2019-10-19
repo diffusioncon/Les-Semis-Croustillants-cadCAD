@@ -25,4 +25,7 @@ class Panel:
         else:
             mu = 13
             var = 9
-            return 1/(2*pi*var)*exp(-(t-mu)**2/2/var)
+            return self.gaussian(mu, var, t)
+
+    def gaussian(self, mu, var, x):
+        return 1/(2*pi*var)*exp(-(x-mu)**2/2/var)

@@ -21,7 +21,7 @@ class Central:
         self.storages.append(Storage())
 
     def step(self):
-        self.produce(self.time)
+        self.produce()
         self.consume()
         self.store()
         self.time += 1
