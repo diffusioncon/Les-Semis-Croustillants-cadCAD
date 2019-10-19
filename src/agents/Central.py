@@ -13,17 +13,26 @@ class Central:
         self.cash = []
         self.villagers = []
         self.businesses = []
-        self.hospital_consumption = 0
         self.token_per_kW = token_per_kw
         self.nb_villagers = nb_villagers
         self.step_production = 0
         self.m_step_production = 0
         self.time = 7
-        self.init_villagers()
+        self.init_simulation()
 
-    def init_villagers(self):
+    def init_simulation(self):
         for i in range(self.nb_villagers):
             self.add_villager()
+        for i in range(self.nb_villagers/100):
+            self.add_business()
+
+    def step(self):
+        self.step_production = 0
+        self.m_step_production = 0
+        self.produce()
+        self.consume()
+        self.store()
+        self.time += 1
 
     def add_panel(self):
         self.panels.append(Panel())
@@ -36,15 +45,7 @@ class Central:
         self.villagers.append(villager)
 
     def add_business(self):
-        self.businesses.append(Business())
-
-    def step(self):
-        self.step_production = 0
-        self.m_step_production = 0
-        self.produce()
-        self.consume()
-        self.store()
-        self.time += 1
+        self.businesses.append(Business(triangular(0, 0.5), triangular(1, 2)))
 
     def produce(self):
         for panel in self.panels:
@@ -55,17 +56,14 @@ class Central:
         # Compute consumption
 
         # Update hospital consumption
-        self.hospital_cons()
-
+        self.hospital_consumption()
         # Update villagers needed consumption
         for v in self.villagers:
             v.needed_consumption_update(self.time)
-
         # Update businesses needed consumption
         for b in self.businesses:
             b.needed_consumption_update(self.time)
 
-        pass
 
     def store(self):
         for storage in self.storages:
@@ -75,14 +73,29 @@ class Central:
                 break
         self.distribute_tokens((self.m_step_production - self.step_production) / self.token_per_kW)
 
+    def take_from_storage(self, quantity):
+        for storage in self.storages:
+            quantity = storage.take(quantity)
+            if quantity == 0:
+                return quantity
+        return quantity
+
     def distribute_tokens(self, quantity):
         # Give N tokens to each villager
         pass
 
-    def hospital_cons(self):
+    def hospital_consumption(self):
         t = self.time % 24
         offset = 2
         scale = 3
         mu = 13
         var = 4**2
-        self.hospital_consumption = offset + scale*scaled_gaussian(mu, var, t)
+        hospital_consumption = offset + scale*1/(2*pi*var)*exp(-(t-mu)**2/2/var)
+        delta = self.step_production - hospital_consumption
+        if delta > 0:
+            self.step_production -= hospital_consumption
+        else:
+            self.step_production = 0
+            if self.take_from_storage(-delta) > 0:
+                print("WE DONT HAVE ENOUGH ELECTRICITY FOR THE HOSPITAL!")
+

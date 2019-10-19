@@ -14,3 +14,11 @@ class Storage:
         quantity -= free
         self.stock += quantity
         return quantity
+
+    def take(self, quantity):
+        if quantity > self.stock:
+            quantity -= self.stock
+            self.stock = 0
+            return quantity
+        self.stock -= quantity
+        return 0
