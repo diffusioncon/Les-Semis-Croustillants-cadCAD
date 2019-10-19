@@ -23,7 +23,9 @@ class Central:
         quantity = total_produced
         for storage in self.storages:
             if quantity:
-                quantity = storage.fill()
+                quantity = storage.fill(quantity)
+            else:
+                break
         self.distribute_tokens((total_produced - quantity) / 100)
 
     def distribute_tokens(self, quantity):
