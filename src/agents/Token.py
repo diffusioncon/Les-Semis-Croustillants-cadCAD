@@ -1,6 +1,6 @@
 class Token:
-    def __init__(self, owner):
-        self.owner = owner
+    def __init__(self):
+        self.owner = None
         self.on_market = False
 
     def put_on_market(self):
