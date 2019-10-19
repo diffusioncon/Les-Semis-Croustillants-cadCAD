@@ -2,6 +2,7 @@ from .Panel import Panel
 from .Storage import Storage
 from .Villager import Villager
 from .Business import Business
+from numpy import pi, exp
 
 
 class Central:
@@ -11,6 +12,7 @@ class Central:
         self.cash = []
         self.villagers = []
         self.businesses = []
+        self.hospital_consumption = 0
         self.token_per_kW = token_per_kw
         self.nb_villagers = nb_villagers
         self.step_production = 0
@@ -44,6 +46,9 @@ class Central:
     def consume(self):
         # Compute consumption
 
+        # Update hospital consumption
+        self.hospital_cons()
+
         # Update villagers needed consumption
         for v in self.villagers:
             v.needed_consumption_update(self.time)
@@ -65,3 +70,11 @@ class Central:
     def distribute_tokens(self, quantity):
         # Give N tokens to each villager
         pass
+
+    def hospital_cons(self):
+        t = self.time % 24
+        offset = 2
+        scale = 3
+        mu = 13
+        var = 4**2
+        self.hospital_consumption = offset + scale*1/(2*pi*var)*exp(-(t-mu)**2/2/var)
