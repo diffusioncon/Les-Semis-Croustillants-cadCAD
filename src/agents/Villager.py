@@ -1,4 +1,4 @@
-from math import ceil, floor
+from math import ceil
 from .Market import Market
 from .functions import scaled_gaussian
 from .Token import Token
@@ -35,8 +35,8 @@ class Villager:
 
     def sell(self, token):
         self.tokens.remove(token)
-        if not Villager.market.ask(token):
-            self.tokens_on_market.add(token)
+        self.tokens_on_market.add(token)
+        Villager.market.ask(token)
 
     def buy(self, quantity):
         Villager.market.bid(self, quantity)
@@ -65,15 +65,15 @@ class Villager:
                 to_pull = on_market_count - missing_tokens
             else:
                 to_pull = on_market_count
-            self.pull_from_market(to_pull)
+            self.pull_from_market(int(to_pull))
             missing_tokens -= on_market_count
             if missing_tokens:
                 self.buy(ceil(missing_tokens))
         else:
-            excess = floor((available_consumption - 10 * self.needed_consumption) / Token.KWH_PER_TOKEN)
+            excess = (available_consumption - 10 * self.needed_consumption) / Token.KWH_PER_TOKEN
             if excess > 0:
-                for i in range(excess):
-                    token = self.tokens.pop()
+                for i in range(int(excess)):
+                    token = tuple(self.tokens)[0]
                     self.sell(token)
 
     def not_enough_energy(self):
@@ -87,3 +87,6 @@ class Villager:
             else:
                 self.not_enough_energy()
                 return
+
+    def __lt__(self, other):
+        return self.bank < other.bank
