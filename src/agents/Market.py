@@ -5,6 +5,7 @@ class Market:
     _bid = []
     _ask = []
     last_price = 70
+    central = None
 
     def ask(self, token):
         token.put_on_market()
@@ -37,11 +38,12 @@ class Market:
 
     def transaction(self, token, buyer, price):
         owner = token.owner
-        owner.credit(price)
+        owner.credit(price*.0001)
         owner.remove_token(token)
         buyer.add_token(token)
         token.remove_from_market()
         self.last_price = price
+        self.central.bank += price*.0001
 
     def clean(self):
         for i in self._bid:

@@ -5,7 +5,7 @@ EROSION_RATE = .005/24
 
 class Panel:
     def __init__(self, hourly_erosion_rate=EROSION_RATE):
-        self.production_per_period = 2000
+        self.production_per_period = 5000
         self.erosion = 0
         self.hourly_erosion_rate = hourly_erosion_rate
 
@@ -13,7 +13,7 @@ class Panel:
         self.erosion += self.hourly_erosion_rate
         return self.production_per_period*(1-self.erosion)*self.hour_prod(time)
 
-    def repare(self):
+    def repair(self):
         self.erosion = 0
 
     @staticmethod

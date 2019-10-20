@@ -12,7 +12,7 @@ class Central:
     def __init__(self, nb_villagers):
         self.panels = []
         self.storages = []
-        self.bank = randint(100, 10000)
+        self.bank = randint(100, 100000)
         self.villagers = []
         self.businesses = []
         self.nb_villagers = nb_villagers
@@ -24,6 +24,7 @@ class Central:
         self.m_businesses_consumption = 0
         self.m_hospital_consumption = 0
         self.init_simulation()
+        Villager.market.central = self
 
     def init_simulation(self):
         for i in range(self.nb_villagers):
@@ -41,7 +42,6 @@ class Central:
 
     def step(self):
         print(self.time)
-        print("Bank : ", self.bank)
         self.step_production = 0
         self.m_step_production = 0
         if self.time % 24 == 6:
@@ -59,15 +59,13 @@ class Central:
             add_panel_cost = 30000
             for p in self.panels:
                 if p.erosion > .1 and self.bank > repair_cost:
-                    p.repare()
+                    p.repair()
                     self.bank -= repair_cost
 
             if self.bank > add_panel_cost:
                 self.add_panel()
                 self.add_storage()
                 self.bank -= add_panel_cost
-
-        print("Grid numbers : ", len(self.panels))
 
         self.trade()
         self.consume()
