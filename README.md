@@ -27,3 +27,9 @@ The biggest challenge to us has been to integrate cadCAD and learn how to use it
 
 ## Opinion on cadCAD:  
 cadCAD has been very useful to log the progression of the simulation. However, its procedural nature was a big drawback and we had to do a lot of "hacks" to use it with our preferred coding style. Besides, it seems like cadCAD is trying to use Python `thread` library which only makes it run slower rather than faster because `Python` doesn't have CPU bound `multithreading` (because of the GIL.) [Read about the GIL](https://www.geeksforgeeks.org/what-is-the-python-global-interpreter-lock-gil/)
+
+
+## Graphs:
+<img src="https://github.com/diffusioncon/Team-4/blob/master/images/bank.png?raw=true" />
+<img src="https://github.com/diffusioncon/Team-4/blob/master/images/production.png?raw=true" />
+<img src="https://github.com/diffusioncon/Team-4/blob/master/images/bid_ask.png?raw=true />
