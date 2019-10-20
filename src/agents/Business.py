@@ -32,5 +32,5 @@ class Business(Villager):
 
     def pay_employees(self):
         for employee in self.employees:
-            employee.add_cash(MINIMUM_WAGE)
+            employee.credit(MINIMUM_WAGE)
             self.bank -= MINIMUM_WAGE

@@ -4,7 +4,7 @@ from heapq import heappush, heappop
 class Market:
     _bid = []
     _ask = []
-    last_price = 0
+    last_price = 100
 
     def ask(self, token):
         token.put_on_market()

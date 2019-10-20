@@ -1,4 +1,5 @@
 from random import triangular, shuffle, randint
+import time
 from .Panel import Panel
 from .Storage import Storage
 from .Villager import Villager
@@ -8,13 +9,12 @@ from .functions import scaled_gaussian
 
 
 class Central:
-    def __init__(self, token_per_kw, nb_villagers):
+    def __init__(self, nb_villagers):
         self.panels = []
         self.storages = []
         self.cash = []
         self.villagers = []
         self.businesses = []
-        self.token_per_kW = token_per_kw
         self.nb_villagers = nb_villagers
         self.step_production = 0
         self.m_step_production = 0
@@ -27,6 +27,8 @@ class Central:
             self.add_villager()
         for i in range(int(self.nb_villagers / 100)):
             self.add_business()
+        self.add_panel()
+        self.add_storage()
 
     def step(self):
         self.step_production = 0
@@ -42,9 +44,10 @@ class Central:
         self.consume()
         self.store()
         self.time += 1
+        print(len(Villager.market._ask), len(Villager.market._bid))
 
     def distribute_tokens(self):
-        quantity = self.step_production / self.token_per_kW
+        quantity = int(self.step_production / Token.KWH_PER_TOKEN)
         for _ in range(quantity):
             villager = self.villagers[self.current_token_id]
             villager.add_token(Token())
@@ -74,8 +77,9 @@ class Central:
     def add_business(self):
         business = Business(triangular(0, 0.5), triangular(1, 2))
         self.businesses.append(business)
-        unemployed = shuffle(list(filter(lambda v: not v.employed, self.villagers)))
-        for _ in range(randint(1, int(len(unemployed) / 10))):
+        unemployed = list(filter(lambda v: not v.employed, self.villagers))
+        shuffle(unemployed)
+        for _ in range(randint(1, len(unemployed) // 10)):
             business.add_employee(unemployed.pop())
 
     def produce(self):

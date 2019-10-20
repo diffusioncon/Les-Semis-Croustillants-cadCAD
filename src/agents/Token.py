@@ -10,3 +10,6 @@ class Token:
 
     def remove_from_market(self):
         self.on_market = False
+
+    def __lt__(self, other):
+        return True
