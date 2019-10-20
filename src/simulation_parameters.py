@@ -1,4 +1,4 @@
-DAYS = 1
+DAYS = 100
 
 simulation_parameters = {
     'T': range(24*DAYS),

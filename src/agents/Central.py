@@ -1,5 +1,5 @@
 from random import triangular, shuffle, randint
-from .Constants import KWH_PER_TOKEN
+from .Constants import KWH_PER_TOKEN, CONSUMPTIONS
 from .Panel import Panel
 from .Storage import Storage
 from .Villager import Villager
@@ -29,22 +29,32 @@ class Central:
             self.add_business()
         self.add_panel()
         self.add_storage()
+        in_storage = self.total_stored()
+        initial_tokens = in_storage / KWH_PER_TOKEN
+        initial_tokens_per_habitant = int(initial_tokens / self.nb_villagers)
+        for villager in self.villagers:
+            for _ in range(initial_tokens_per_habitant):
+                villager.add_token(Token())
 
     def step(self):
+        print(self.time)
         self.step_production = 0
         self.m_step_production = 0
+        if self.time % 24 == 6:
+            Villager.market.clean()
         self.produce()
         self.hospital_consumption()
         self.distribute_tokens()
         self.compute_needed_consumption()
         self.business_activities()
-        if self.time % 24*30 == 0:
+        if self.time % (24 * 30) == 0:
             self.pay_wages()
+            self.hiring_process()
         self.trade()
         self.consume()
         self.store()
         self.time += 1
-        print(len(Villager.market._ask), len(Villager.market._bid))
+        #print("ask:", len(Villager.market._ask), "bid:", len(Villager.market._bid))
 
     def distribute_tokens(self):
         quantity = int(self.step_production / KWH_PER_TOKEN)
@@ -64,18 +74,32 @@ class Central:
         for b in self.businesses:
             b.pay_employees()
 
+    def hiring_process(self):
+        unemployed = list(filter(lambda v: not v.employed, self.villagers))
+        shuffle(unemployed)
+        for b in self.businesses:
+            b.hire_employees(unemployed)
+
     def add_panel(self):
         self.panels.append(Panel())
 
     def add_storage(self):
         self.storages.append(Storage())
 
+    def total_stored(self):
+        total = 0
+        for storage in self.storages:
+            total += storage.stock
+        return total
+
     def add_villager(self):
-        villager = Villager(triangular(0, 1), triangular(0, 1))
+        morning = triangular(0, .8)
+        night = triangular(morning, 1 - morning)
+        villager = Villager(morning, night)
         self.villagers.append(villager)
 
     def add_business(self):
-        business = Business(triangular(0, 0.5), triangular(1, 2))
+        business = Business(triangular(0, 0.5), triangular(0, .5))
         self.businesses.append(business)
         unemployed = list(filter(lambda v: not v.employed, self.villagers))
         shuffle(unemployed)
@@ -118,11 +142,11 @@ class Central:
 
     def hospital_consumption(self):
         t = self.time % 24
-        offset = 200
-        scale = 3
+        offset = .4
+        scale = .6
         mu = 13
         var = 4 ** 2
-        hospital_consumption = offset + scale * scaled_gaussian(mu, var, t)
+        hospital_consumption = (offset + scale * scaled_gaussian(mu, var, t)) * CONSUMPTIONS.HOSPITALS
         delta = self.step_production - hospital_consumption
         if delta > 0:
             self.step_production -= hospital_consumption
@@ -130,4 +154,3 @@ class Central:
             self.step_production = 0
             if self.take_from_storage(-delta) > 0:
                 print("WE DONT HAVE ENOUGH ELECTRICITY FOR THE HOSPITAL!")
-        print(hospital_consumption)

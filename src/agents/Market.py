@@ -4,11 +4,11 @@ from heapq import heappush, heappop
 class Market:
     _bid = []
     _ask = []
-    last_price = 100
+    last_price = 70
 
     def ask(self, token):
         token.put_on_market()
-        if len(self._bid) and self._bid[-1][0] >= self.last_price * .98:
+        if len(self._bid) and self._bid[-1][0] >= self.last_price - .01:
             price, quantity, buyer = self._bid[-1]
             self.transaction(token, buyer, price)
             if quantity == 1:
@@ -20,10 +20,12 @@ class Market:
         return False
 
     def bid(self, villager, quantity):
-        bid_price = self.last_price * 1.02
+        bid_price = self.last_price + 0.01
         while len(self._ask) and self._ask[0][0] <= bid_price:
             price, token = heappop(self._ask)
             self.transaction(token, villager, price)
+            villager.debit(price)
+        villager.debit(bid_price)
         heappush(self._bid, (bid_price, quantity, villager))
 
     def pull_from_ask(self, token):
@@ -38,7 +40,10 @@ class Market:
         owner.credit(price)
         owner.remove_token(token)
         buyer.add_token(token)
-        buyer.debit(price)
         token.remove_from_market()
         self.last_price = price
 
+    def clean(self):
+        for i in self._bid:
+            i[2].debit(i[0]*i[1])
+        self._bid = []
