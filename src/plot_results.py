@@ -37,3 +37,9 @@ def plot_results(results, plot_distance=200000):
     plt.title("Market")
     plt.legend()
     plt.show()
+
+    plt.plot(df['timestep'][0: plot_distance], df['employed'][0: plot_distance],
+             label='Employed villages')
+    plt.title("Employment")
+    plt.legend()
+    plt.show()

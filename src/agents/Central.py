@@ -23,6 +23,7 @@ class Central:
         self.m_villagers_consumption = 0
         self.m_businesses_consumption = 0
         self.m_hospital_consumption = 0
+        self.m_employed = 0
         self.init_simulation()
         Villager.market.central = self
 
@@ -39,9 +40,11 @@ class Central:
         for villager in self.villagers:
             for _ in range(initial_tokens_per_habitant):
                 villager.add_token(Token())
+        self.m_employed = len(list(filter(lambda v: v.employed, self.villagers)))
 
     def step(self):
         print(self.time)
+        self.m_employed = len(list(filter(lambda v: v.employed, self.villagers)))
         self.step_production = 0
         self.m_step_production = 0
         if self.time % 24 == 6:

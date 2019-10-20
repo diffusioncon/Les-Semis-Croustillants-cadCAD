@@ -19,7 +19,8 @@ class Parameters:
             "bank": 0,
             "bid": 0,
             "ask": 0,
-            "price": 0
+            "price": 0,
+            "employed": self.central.m_employed
         }
 
     @staticmethod
@@ -90,6 +91,11 @@ class Parameters:
             return "price", Villager.market.last_price
         return closure
 
+    def get_employed(self):
+        def closure(*_):
+            return "employed", self.central.m_employed
+        return closure
+
     def set_partial_state_update_blocks(self):
         step = self.step(self.central)
         get_time = self.get_time()
@@ -102,6 +108,7 @@ class Parameters:
         get_bid = self.get_bid()
         get_ask = self.get_ask()
         get_price = self.get_price()
+        get_employed = self.get_employed()
         self.partial_state_update_blocks = [
             {
                 "policies": {},
@@ -121,7 +128,8 @@ class Parameters:
                     "bank": get_bank,
                     "bid": get_bid,
                     "ask": get_ask,
-                    "price": get_price
+                    "price": get_price,
+                    "employed": get_employed
                 }
             }
         ]
