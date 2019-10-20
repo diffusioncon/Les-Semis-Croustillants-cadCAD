@@ -1,6 +1,8 @@
 # TEAM 4 [![LES SEMIS CROUSTILLANTS](https://cdn.rawgit.com/sindresorhus/awesome/d7305f38d29fed78fa85652e3a63e154dd8e8829/media/badge.svg)](https://github.com/diffusioncon/Team-4#readme)
  
  LES SEMIS CROUSTILLANTS
+ 
+<img src="https://github.com/diffusioncon/Team-4/blob/master/images/73079632_467603957189016_8393148961547878400_n.png?raw=true" />
 
 
 ## Problematic
