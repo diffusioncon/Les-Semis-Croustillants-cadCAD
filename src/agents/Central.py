@@ -51,15 +51,21 @@ class Central:
         if self.time % (24 * 30) == 0:
             self.pay_wages()
             self.hiring_process()
-            self.bank += randint(100, 10000)
-            repair_cost = 2000
+            self.bank += randint(10, 10000)
+            repair_cost = 1000
+            add_panel_cost = 30000
             for p in self.panels:
                 if p.erosion > .1 and self.bank > repair_cost:
                     p.repare()
                     self.bank -= repair_cost
 
-        for p in self.panels:
-            print("ero : ", p.erosion)
+            if self.bank > add_panel_cost:
+                self.add_panel()
+                self.add_storage()
+                self.bank -= add_panel_cost
+
+        print("Grid numbers : ", len(self.panels))
+
         self.trade()
         self.consume()
         self.store()
