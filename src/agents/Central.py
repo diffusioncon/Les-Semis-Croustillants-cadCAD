@@ -54,7 +54,9 @@ class Central:
         if self.time % (24 * 30) == 0:
             self.pay_wages()
             self.hiring_process()
-            self.bank += randint(10, 10000)
+            max_bank_to_get_donation = 5000
+            if self.bank < max_bank_to_get_donation:
+                self.bank += randint(10, 10000)
             repair_cost = 1000
             add_panel_cost = 30000
             for p in self.panels:
