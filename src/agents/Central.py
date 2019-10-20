@@ -12,7 +12,7 @@ class Central:
     def __init__(self, nb_villagers):
         self.panels = []
         self.storages = []
-        self.bank = 0
+        self.bank = randint(100, 10000)
         self.villagers = []
         self.businesses = []
         self.nb_villagers = nb_villagers
@@ -41,6 +41,7 @@ class Central:
 
     def step(self):
         print(self.time)
+        print("Bank : ", self.bank)
         self.step_production = 0
         self.m_step_production = 0
         if self.time % 24 == 6:
@@ -53,6 +54,15 @@ class Central:
         if self.time % (24 * 30) == 0:
             self.pay_wages()
             self.hiring_process()
+            self.bank += randint(100, 10000)
+            repair_cost = 2000
+            for p in self.panels:
+                if p.erosion > .1 and self.bank > repair_cost:
+                    p.repare()
+                    self.bank -= repair_cost
+
+        for p in self.panels:
+            print("ero : ", p.erosion)
         self.trade()
         self.consume()
         self.store()
