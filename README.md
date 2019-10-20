@@ -1,10 +1,7 @@
-<link href="github-widget/github-widget.css" rel="stylesheet" type="text/css" />
-<div class="github-widget" data-user="some-github-username"></div>
+# TEAM 4 [![LES SEMIS CROUSTILLANTS]
+(https://cdn.rawgit.com/sindresorhus/awesome/d7305f38d29fed78fa85652e3a63e154dd8e8829/media/badge.svg)](https://github.com/diffusioncon/Team-4#readme)
 
 
-# TEAM 4
-
-LES SEMIS CROUSTILLANTS
 
 The problem we hope to solve is that 1 billion people in Africa are living without affordable and reliable energy. This is problematic not only due to the need of basic human needs and for hospitals to give their patients the best possible help. Women feel insecure walking home in the nights due to the lack of streetlights and therefore either say no to job opportunities that includes walking home late or choose to walk home in fear. It is therefore not only a question about energy accessibility but also equality.
 
