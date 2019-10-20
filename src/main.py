@@ -3,6 +3,7 @@ from cadCAD.engine import ExecutionMode, ExecutionContext, Executor
 from agents import Central
 from parameters import Parameters
 from simulation_parameters import simulation_parameters
+from plot_results import plot_results
 
 
 def main():
@@ -16,9 +17,9 @@ def main():
     exec_mode = ExecutionMode()
     exec_context = ExecutionContext(exec_mode.single_proc)
     executor = Executor(exec_context, [config])
-    executor.execute()
-
-    #raw_result = [d for d in raw_result if d['substep'] == len(partial_state_update_blocks)]
+    raw_result, tensor = executor.execute()
+    raw_result = [d for d in raw_result]
+    plot_results(raw_result)
 
 
 if __name__ == "__main__":

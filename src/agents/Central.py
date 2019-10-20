@@ -20,6 +20,9 @@ class Central:
         self.m_step_production = 0
         self.time = 7
         self.current_token_id = 0
+        self.m_villagers_consumption = 0
+        self.m_businesses_consumption = 0
+        self.m_hospital_consumption = 0
         self.init_simulation()
 
     def init_simulation(self):
@@ -124,8 +127,12 @@ class Central:
             agent.trade()
 
     def consume(self):
-        for agent in self.villagers + self.businesses:
-            agent.consume()
+        self.m_villagers_consumption = 0
+        self.m_businesses_consumption = 0
+        for agent in self.villagers:
+            self.m_villagers_consumption += agent.consume()
+        for agent in self.businesses:
+            self.m_businesses_consumption += agent.consume()
 
     def store(self):
         for storage in self.storages:
@@ -146,10 +153,10 @@ class Central:
         scale = .6
         mu = 13
         var = 4 ** 2
-        hospital_consumption = (offset + scale * scaled_gaussian(mu, var, t)) * CONSUMPTIONS.HOSPITALS
-        delta = self.step_production - hospital_consumption
+        self.m_hospital_consumption = (offset + scale * scaled_gaussian(mu, var, t)) * CONSUMPTIONS.HOSPITALS
+        delta = self.step_production - self.m_hospital_consumption
         if delta > 0:
-            self.step_production -= hospital_consumption
+            self.step_production -= self.m_hospital_consumption
         else:
             self.step_production = 0
             if self.take_from_storage(-delta) > 0:

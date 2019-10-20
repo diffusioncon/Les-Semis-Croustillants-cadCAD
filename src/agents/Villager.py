@@ -87,12 +87,15 @@ class Villager:
     def consume(self):
         #print(self.bank)
         # print("TOKENS NEEDED:", tokens_needed, "OWNED:", len(self.tokens) + len(self.tokens_on_market))
+        consumed = 0
         for _ in range(self.tokens_needed()):
             if len(self.tokens):
                 self.tokens.pop()
+                consumed += KWH_PER_TOKEN
             else:
                 self.not_enough_energy()
-                return
+                return consumed
+        return consumed
 
     def __lt__(self, other):
         return self.bank < other.bank
