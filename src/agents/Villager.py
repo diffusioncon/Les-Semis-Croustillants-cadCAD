@@ -1,7 +1,7 @@
 from math import ceil
+from .Constants import KWH_PER_TOKEN
 from .Market import Market
 from .functions import scaled_gaussian
-from .Token import Token
 
 
 NO_ENERGY_FEE = 1
@@ -57,9 +57,9 @@ class Villager:
 
     def trade(self):
         tokens_quantity = len(self.tokens)
-        available_consumption = tokens_quantity * Token.KWH_PER_TOKEN
+        available_consumption = tokens_quantity * KWH_PER_TOKEN
         if self.needed_consumption > available_consumption:
-            missing_tokens = (self.needed_consumption - available_consumption) / Token.KWH_PER_TOKEN
+            missing_tokens = (self.needed_consumption - available_consumption) / KWH_PER_TOKEN
             on_market_count = len(self.tokens_on_market)
             if on_market_count > missing_tokens:
                 to_pull = on_market_count - missing_tokens
@@ -70,7 +70,7 @@ class Villager:
             if missing_tokens:
                 self.buy(ceil(missing_tokens))
         else:
-            excess = (available_consumption - 10 * self.needed_consumption) / Token.KWH_PER_TOKEN
+            excess = (available_consumption - 10 * self.needed_consumption) / KWH_PER_TOKEN
             if excess > 0:
                 for i in range(int(excess)):
                     token = tuple(self.tokens)[0]
@@ -80,7 +80,7 @@ class Villager:
         self.bank -= NO_ENERGY_FEE
 
     def consume(self):
-        tokens_needed = ceil(self.needed_consumption / Token.KWH_PER_TOKEN)
+        tokens_needed = ceil(self.needed_consumption / KWH_PER_TOKEN)
         for _ in range(tokens_needed):
             if len(self.tokens):
                 self.tokens.pop()

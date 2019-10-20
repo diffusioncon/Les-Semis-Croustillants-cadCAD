@@ -1,5 +1,5 @@
 from random import triangular, shuffle, randint
-import time
+from .Constants import KWH_PER_TOKEN
 from .Panel import Panel
 from .Storage import Storage
 from .Villager import Villager
@@ -12,7 +12,7 @@ class Central:
     def __init__(self, nb_villagers):
         self.panels = []
         self.storages = []
-        self.cash = []
+        self.bank = 0
         self.villagers = []
         self.businesses = []
         self.nb_villagers = nb_villagers
@@ -47,7 +47,7 @@ class Central:
         print(len(Villager.market._ask), len(Villager.market._bid))
 
     def distribute_tokens(self):
-        quantity = int(self.step_production / Token.KWH_PER_TOKEN)
+        quantity = int(self.step_production / KWH_PER_TOKEN)
         for _ in range(quantity):
             villager = self.villagers[self.current_token_id]
             villager.add_token(Token())
@@ -118,7 +118,7 @@ class Central:
 
     def hospital_consumption(self):
         t = self.time % 24
-        offset = 2
+        offset = 200
         scale = 3
         mu = 13
         var = 4 ** 2
@@ -130,3 +130,4 @@ class Central:
             self.step_production = 0
             if self.take_from_storage(-delta) > 0:
                 print("WE DONT HAVE ENOUGH ELECTRICITY FOR THE HOSPITAL!")
+        print(hospital_consumption)
