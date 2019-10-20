@@ -1,3 +1,7 @@
+<link href="github-widget/github-widget.css" rel="stylesheet" type="text/css" />
+<div class="github-widget" data-user="some-github-username"></div>
+
+
 # TEAM 4
 
 LES SEMIS CROUSTILLANTS
